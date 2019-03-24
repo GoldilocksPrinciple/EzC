@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{48D80A7A-9BD8-44CE-B57B-84D6733BFF0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzCompare", "WindowsFormsApp1\EzCompare.csproj", "{48D80A7A-9BD8-44CE-B57B-84D6733BFF0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
