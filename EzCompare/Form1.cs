@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Threading;
+using System.Linq;
 
 
 namespace EzCompare
@@ -40,11 +41,6 @@ namespace EzCompare
             {
                 InfoTextbox.ForeColor = Color.Red;
                 InfoTextbox.Text = "Please choose all your desired directories (path) first.";
-            }
-            else if (Directory.Exists(Dir1Path.Text) || Directory.Exists(Dir2Path.Text))
-            {
-                InfoTextbox.ForeColor = Color.Red;
-                InfoTextbox.Text = "One of your input directories do not exist...";
             }
             else
             {
@@ -83,6 +79,13 @@ namespace EzCompare
                 Invoke(new Action(() =>
                 {
                     CompareButton.Enabled = false;
+                    Dir1Button.Enabled = false;
+                    Dir2Button.Enabled = false;
+                    OutputDirButton.Enabled = false;
+                    RadioButtonDir1.Enabled = false;
+                    RadioButtonDir2.Enabled = false;
+                    RadioButtonItemTag.Enabled = false;
+                    RadioButtonTrans.Enabled = false;
                 }));
 
                 string outputDirectoryPath = Path.Combine(OutputDirPath.Text, "EzCompare_result");
@@ -114,23 +117,36 @@ namespace EzCompare
                             using (StreamWriter resultFile = new StreamWriter(Path.Combine(outputDirectoryPath, outputFileName), false, Encoding.Unicode))
                             {
                                 await resultFile.WriteLineAsync("Missing line(s) of " + dir1TextFiles[i] + " compare to " + dir2TextFiles[j]);
-                                for (int k = 0; k < b_lines.Length; k++)
+                                if (RadioButtonItemTag.Checked == true)
                                 {
-                                    string[] strip = b_lines[k].ToLower().Split('"');
-                                    try
+                                    for (int k = 0; k < b_lines.Length; k++)
                                     {
-                                        if (strip.Length > 2)
+                                        if (!a_lines.Any(line => line.Contains(b_lines[k])))
                                         {
-                                            if (!a_lines_string.Contains('"' + strip[1] + '"'))
-                                            {
-                                                await resultFile.WriteLineAsync(b_lines[k]);
-                                            }
+                                            await resultFile.WriteLineAsync(b_lines[k]);
                                         }
                                     }
-                                    catch (Exception e)
+                                }
+                                else
+                                {
+                                    for (int k = 0; k < b_lines.Length; k++)
                                     {
-                                        if (e is IndexOutOfRangeException) { }
-                                        else { Console.WriteLine("Exception " + e.ToString()); }
+                                        string[] strip = b_lines[k].ToLower().Split('"');
+                                        try
+                                        {
+                                            if (strip.Length > 2)
+                                            {
+                                                if (!a_lines_string.Contains('"' + strip[1] + '"'))
+                                                {
+                                                    await resultFile.WriteLineAsync(b_lines[k]);
+                                                }
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            if (e is IndexOutOfRangeException) { }
+                                            else { Console.WriteLine("Exception " + e.ToString()); }
+                                        }
                                     }
                                 }
                             }
@@ -144,23 +160,36 @@ namespace EzCompare
                             using (StreamWriter resultFile = new StreamWriter(Path.Combine(outputDirectoryPath, outputFileName), false, Encoding.Unicode))
                             {
                                 await resultFile.WriteLineAsync("Missing line(s) of " + dir2TextFiles[i] + " compare to " + dir1TextFiles[j]);
-                                for (int k = 0; k < a_lines.Length; k++)
+                                if (RadioButtonItemTag.Checked == true)
                                 {
-                                    string[] strip = a_lines[k].ToLower().Split('"');
-                                    try
+                                    for (int k = 0; k < a_lines.Length; k++)
                                     {
-                                        if (strip.Length > 2)
+                                        if (!b_lines.Any(line => line.Contains(a_lines[k])))
                                         {
-                                            if (!b_lines_string.Contains('"' + strip[1] + '"'))
-                                            {
-                                                await resultFile.WriteLineAsync(a_lines[k]);
-                                            }
+                                            await resultFile.WriteLineAsync(a_lines[k]);
                                         }
                                     }
-                                    catch (Exception e)
+                                }
+                                else
+                                {
+                                    for (int k = 0; k < a_lines.Length; k++)
                                     {
-                                        if (e is IndexOutOfRangeException) { }
-                                        else { Console.WriteLine("Exception " + e.ToString()); }
+                                        string[] strip = a_lines[k].ToLower().Split('"');
+                                        try
+                                        {
+                                            if (strip.Length > 2)
+                                            {
+                                                if (!b_lines_string.Contains('"' + strip[1] + '"'))
+                                                {
+                                                    await resultFile.WriteLineAsync(a_lines[k]);
+                                                }
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            if (e is IndexOutOfRangeException) { }
+                                            else { Console.WriteLine("Exception " + e.ToString()); }
+                                        }
                                     }
                                 }
                             }
@@ -173,6 +202,13 @@ namespace EzCompare
                     InfoTextbox.ForeColor = Color.Green;
                     InfoTextbox.Text = "Finish!";
                     CompareButton.Enabled = true;
+                    Dir1Button.Enabled = true;
+                    Dir2Button.Enabled = true;
+                    OutputDirButton.Enabled = true;
+                    RadioButtonDir1.Enabled = true;
+                    RadioButtonDir2.Enabled = true;
+                    RadioButtonItemTag.Enabled = true;
+                    RadioButtonTrans.Enabled = true;
                 }));
             }
         }
